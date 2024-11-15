@@ -16,7 +16,6 @@ This project is a **Lesson Booking System** designed to support an organization 
 - **Instructor Management**: Register seasonal instructors and set their availability.
 - **Client Registration**: Register clients and allow them to book lessons.
 - **Scheduling and Bookings**: Schedule lessons at specific locations and allow clients to make bookings.
-- **Concurrency Control**: Ensure mutual exclusion for data access by using reader-writer locks.
 
 ## Getting Started
 
