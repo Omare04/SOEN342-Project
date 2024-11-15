@@ -2,4 +2,5 @@ id,lesson_type,location,schedule,instructor,is_public
 lesson-001,Yoga,Location A,schedule-001,,False
 lesson-002,Pilates,Location B,schedule-002,Sophia Taylor,True
 lesson-003,Karate,Location C,schedule-003,,False
-lesson-004,Dance,Location D,schedule-004,Lucas Thompson,True
+lesson-004,Dance,Location D,schedule-004,I005,True
+f5286ab2-dda8-4444-b14d-dad23642b580,Yoga,Berlin,schedule-004,,False

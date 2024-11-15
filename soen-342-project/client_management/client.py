@@ -42,6 +42,6 @@ class Client:
             return
         
         guardian = {'guardian_name': guardian_name, 'minor_name': minor_name, 'minor_age': minor_age}
-        initialize_csv('data/guardians.csv', ['guardian_name', 'minor_name', 'minor_age'])
-        append_csv('data/guardians.csv', guardian, fieldnames=['guardian_name', 'minor_name', 'minor_age'])
+        initialize_csv('data/guardian.csv', ['guardian_name', 'minor_name', 'minor_age'])
+        append_csv('data/guardian.csv', guardian, fieldnames=['guardian_name', 'minor_name', 'minor_age'])
         print("Guardian registered successfully.")

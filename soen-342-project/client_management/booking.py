@@ -9,7 +9,7 @@ class Booking:
     def create_booking(client_name, offering_id):
         # Load clients and guardians to verify relationships
         clients = read_csv('data/clients.csv')
-        guardians = read_csv('data/guardians.csv')
+        guardians = read_csv('data/guardian.csv')
         
         # Verify the client exists
         client = next((c for c in clients if c['name'] == client_name), None)
