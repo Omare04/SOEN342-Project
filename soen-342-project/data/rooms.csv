@@ -1,0 +1,4 @@
+room_id,room_number,is_available,location_id
+1,A101,True,1
+2,B202,True,2
+3,C303,False,3

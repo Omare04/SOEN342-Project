@@ -1,5 +1,4 @@
-client_name,offering_id
-John Doe,offering-001
-Alice Johnson,offering-002
-Jane Smith,offering-003
-Bob Brown,offering-002
+booking_id,offering_id,client_id,schedule_id,is_available
+B001,O001,1,S001,True
+B002,O003,2,S003,True
+B003,2,0002

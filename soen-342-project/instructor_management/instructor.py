@@ -1,64 +1,111 @@
-# instructor_management/instructor.py
+from utils.utils import append_csv, read_csv, write_csv, initialize_csv
+from User import User
 
-from utils.utils import append_csv, read_csv, write_csv
-
-class Instructor:
-    def __init__(self, name, specialization, cities):
-        self.name = name
+class Instructor(User):
+    
+    def __init__(self, user_id, name, phone, email, specialization):
+        super().__init__(user_id, name, phone, email)  # Inherit common attributes
         self.specialization = specialization
-        self.cities = cities
 
     @staticmethod
-    def register(name, specialization, cities):
-        # Read existing instructors to determine the latest ID
+    def register(name, phone, email, specialization):
+        """
+        Register a new instructor.
+        """
+        # Generate unique instructor ID
         instructors = read_csv('data/instructors.csv')
-        
-        if instructors:
-            # Ensure that all existing IDs are valid and non-empty
-            valid_ids = [instructor['id'] for instructor in instructors if instructor.get('id', '').startswith('I')]
-            
-            if valid_ids:
-                # Sort IDs and get the last one in numeric order
-                last_id = sorted(valid_ids, key=lambda x: int(x[1:]))[-1]
-                new_id = f"I{int(last_id[1:]) + 1:03}"  # Increment the numeric part of the ID
-            else:
-                new_id = "I001"  # Start with 'I001' if no valid IDs exist
-        else:
-            new_id = "I001"  # Start with 'I001' if the file is empty
+        instructor_id = f"I{len(instructors) + 1:03}"
 
-        # Append instructor data with the new ID
+        # Register in `users.csv` as an `Instructor`
+        User.register_user(instructor_id, name, phone, email, "Instructor")
+
+        # Initialize `instructors.csv` if it doesn't exist
+        initialize_csv('data/instructors.csv', ['instructor_id', 'specialization'])
+
+        # Append instructor-specific data to `instructors.csv`
         append_csv('data/instructors.csv', {
-            'id': new_id,
-            'name': name,
-            'specialization': specialization,
-            'cities': ','.join(cities)
-        }, fieldnames=['id', 'name', 'specialization', 'cities'])
-        
-        print(f"Instructor {name} registered successfully with ID {new_id}.")
+            'instructor_id': instructor_id,
+            'specialization': specialization
+        }, fieldnames=['instructor_id', 'specialization'])
+        print(f"Instructor {name} registered successfully with ID {instructor_id}.")
 
     @staticmethod
-    def assign_instructor_to_lesson(lesson_id, instructor_name):
-        # Read the current lessons and instructors
-        lessons = read_csv('data/lessons.csv')
+    def assign_to_offering(offering_id, instructor_id):
+        """
+        Assign the instructor to an offering. The instructor can only assign themselves.
+        """
+        # Read the data from CSV files
         instructors = read_csv('data/instructors.csv')
-        
-        # Find the instructor by name
-        instructor = next((inst for inst in instructors if inst['name'] == instructor_name), None)
+        offerings = read_csv('data/offerings.csv')
+
+        # Validate instructor ID
+        instructor = next((inst for inst in instructors if inst['instructor_id FK(user_id)'] == instructor_id), None)
         if not instructor:
             print("Error: Instructor not found.")
             return
-        
-        # Find the lesson by ID
-        lesson = next((lesson for lesson in lessons if lesson['id'] == lesson_id), None)
-        if not lesson:
-            print("Error: Lesson not found.")
-            return
-        
-        # Assign the instructor to the lesson
-        lesson['instructor'] = instructor['id']
-        lesson['is_public'] = 'True'  # Make lesson public once assigned
 
-        # Write updated lessons back to the CSV file
-        write_csv('data/lessons.csv', lessons, fieldnames=lessons[0].keys())
-        
-        print(f"Instructor {instructor_name} assigned to lesson {lesson_id} successfully.")
+        # Validate offering
+        offering = next((off for off in offerings if off['offering_id'] == offering_id), None)
+        if not offering:
+            print("Error: Offering not found.")
+            return
+
+        # Ensure the offering is available
+        if offering.get('is_available', 'True') == 'False':
+            print(f"Error: Offering {offering_id} is not available for assignment.")
+            return
+
+        # Assign instructor to the offering
+        if instructor_id == instructor['instructor_id FK(user_id)']:
+            offering['instructor_id'] = instructor_id
+            offering['is_available'] = 'False'  # Mark the offering as unavailable
+            write_csv('data/offerings.csv', offerings, fieldnames=offerings[0].keys())
+            print(f"Instructor {instructor_id} successfully assigned to offering {offering_id}.")
+        else:
+            print("Error: You can only assign yourself to an offering.")
+
+
+    @staticmethod
+    def view_assigned_offerings(instructor_id):
+        """
+        View all offerings assigned to this instructor.
+        """
+        # Read required data
+        instructors = read_csv('data/instructors.csv')
+        offerings = read_csv('data/offerings.csv')
+        locations = read_csv('data/locations.csv')
+        schedules = read_csv('data/schedules.csv')
+
+        # Validate instructor ID
+        instructor = next((inst for inst in instructors if inst['instructor_id FK(user_id)'] == instructor_id), None)
+        if not instructor:
+            print("Error: Instructor not found.")
+            return
+
+        # List offerings assigned to the instructor
+        assigned_offerings = [off for off in offerings if off['instructor_id'] == instructor_id]
+        if not assigned_offerings:
+            print("No offerings assigned to this instructor.")
+            return
+
+        # Print the table header
+        print("\nAssigned Offerings:")
+        print(f"{'Offering ID':<15}{'Lesson Type':<20}{'Location':<25}{'Schedule':<30}")
+        print("=" * 90)
+
+        # Display assigned offerings
+        for offering in assigned_offerings:
+            try:
+                # Fetch location and schedule details
+                location = next((loc for loc in locations if loc['location_id'] == offering['location_id']), None)
+                schedule = next((sch for sch in schedules if sch['schedule_id'] == offering['schedule_id']), None)
+
+                location_name = location['name'] if location else "Unknown Location"
+                schedule_info = f"{schedule['start_date']} to {schedule['end_date']} ({schedule['day']})" if schedule else "Unknown Schedule"
+
+                # Print offering details
+                print(f"{offering['offering_id']:<15}{offering['lesson_type']:<20}{location_name:<25}{schedule_info:<30}")
+            except KeyError as e:
+                print(f"Error: Missing field {e} in offering data: {offering}")
+
+        print("=" * 90)

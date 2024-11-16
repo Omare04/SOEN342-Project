@@ -1,0 +1,3 @@
+admin_id FK(user_id)
+1
+6

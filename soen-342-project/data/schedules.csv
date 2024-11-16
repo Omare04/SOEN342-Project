@@ -1,5 +1,4 @@
-id,start_date,end_date,start_time,end_time,day
-schedule-001,2024-11-01,2024-11-30,09:00,10:00,Monday
-schedule-002,2024-11-01,2024-11-30,11:00,12:00,Wednesday
-schedule-003,2024-11-01,2024-11-30,14:00,15:00,Friday
-schedule-004,2024-11-01,2024-11-30,16:00,17:00,Saturday
+schedule_id,start_date,end_date,start_time,end_time,day
+S001,2024-11-20,2024-12-20,08:00,09:00,Monday
+S002,2024-11-21,2024-12-21,10:00,11:00,Wednesday
+S003,2024-11-22,2024-12-22,14:00,15:00,Friday

@@ -1,0 +1,9 @@
+user_id,name,phone,email,user_type
+1,Admin One,1234567890,admin.one@example.com,Admin
+2,Jane Doe,0987654321,jane.doe@example.com,Client
+3,John Smith,4567891230,john.smith@example.com,Instructor
+4,Mary Guardian,7894561230,mary.guardian@example.com,Guardian
+5,Client Two,1233211234,client.two@example.com,Client
+6,Admin Two,3216549870,admin.two@example.com,Admin
+7,Instructor Two,7418529630,instructor.two@example.com,Instructor
+8,Guardian Two,9632587410,guardian.two@example.com,Guardian

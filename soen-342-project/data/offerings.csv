@@ -1,0 +1,4 @@
+offering_id,lesson_type,is_private,is_available,location_id,schedule_id,instructor_id,room_id
+0001,Yoga,False,False,1,S001,3,1
+0002,Dance,True,False,2,S002,,2
+0003,Swimming,False,False,3,S003,3,3

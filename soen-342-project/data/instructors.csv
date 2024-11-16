@@ -1,6 +1,3 @@
-id,name,specialization,cities
-I001,Mark Williams,Yoga,New York,Los Angeles
-I002,Emma Davis,Pilates,San Francisco,Chicago
-I003,Lucas Thompson,Karate,Miami,Orlando
-I004,Sophia Taylor,Dance,Houston,Dallas
-I005,omar,Yoga,"berline,tevla"
+instructor_id FK(user_id),specialization
+3,Yoga
+7,Gym

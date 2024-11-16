@@ -1,4 +1,3 @@
-guardian_name,minor_name,minor_age
-Emily Smith,Jane Smith,17
-Robert Brown,Bob Brown,15
-oanr,12,musa
+client_id FK(user_id),age,is_loggedIn,guardian_id FK(guardian_id)
+2,15,True,4
+5,14,True,8
