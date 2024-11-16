@@ -100,14 +100,24 @@ class Admin:
         """
         Remove a client by their ID (Admin-only operation).
         """
+        # Read the clients data
         clients = read_csv('data/clients.csv')
-        updated_clients = [c for c in clients if int(c['client_id']) != int(client_id)]
 
+        # Ensure client_id comparison matches data type in the CSV file
+        updated_clients = [c for c in clients if c.get('client_id') != str(client_id)]
+
+        # Check if the client was found
         if len(clients) == len(updated_clients):
-            print("Error: Client not found.")
+            print(f"Error: Client with ID {client_id} not found.")
         else:
-            write_csv('data/clients.csv', updated_clients, fieldnames=['client_id', 'name', 'phone', 'email', 'age', 'guardian_id'])
+            # Write the updated list back to the CSV
+            write_csv(
+                'data/clients.csv',
+                updated_clients,
+                fieldnames=['client_id', 'name', 'phone', 'email', 'age', 'guardian_id']
+            )
             print(f"Client with ID {client_id} removed successfully.")
+
 
     @staticmethod
     def view_all_clients():
@@ -128,15 +138,24 @@ class Admin:
         
     @staticmethod
     def delete_instructor(instructor_id):
-        # Remove instructor from the database
+        """Delete instructor based on the instructor ID."""
+        # Read instructors data
         instructors = read_csv('data/instructors.csv')
-        updated_instructors = [inst for inst in instructors if inst['instructor_id'] != instructor_id]
+        
+        # Update the key to match the CSV column header
+        updated_instructors = [inst for inst in instructors if inst['instructor_id FK(user_id)'] != str(instructor_id)]
 
+        # Check if the instructor was found
         if len(updated_instructors) == len(instructors):
             print("Error: Instructor not found.")
             return
 
-        write_csv('data/instructors.csv', updated_instructors, fieldnames=['instructor_id', 'name', 'phone', 'specialization'])
+        # Write the updated list back to the CSV
+        write_csv(
+            'data/instructors.csv',
+            updated_instructors,
+            fieldnames=['instructor_id FK(user_id)', 'specialization']
+        )
         print("Instructor deleted successfully.")
 
     @staticmethod
@@ -215,21 +234,30 @@ class Admin:
         """
         Remove a guardian by their ID (Admin-only operation).
         """
+        # Read the CSV files
         guardians = read_csv('data/guardians.csv')
-        users = read_csv('data/users.csv')  # To ensure the corresponding user is also handled
+        users = read_csv('data/users.csv')  # Ensure the corresponding user is also handled
 
-        # Find and remove the guardian from `guardians.csv`
+        # Filter out the guardian with the given ID
         updated_guardians = [g for g in guardians if int(g['guardian_id FK(user_id)']) != int(guardian_id)]
         if len(guardians) == len(updated_guardians):
             print("Error: Guardian not found.")
             return
 
         # Update the `guardians.csv` file
-        write_csv('data/guardians.csv', updated_guardians, fieldnames=['guardian_id FK(user_id)', 'client_id', 'age'])
+        write_csv(
+            'data/guardians.csv',
+            updated_guardians,
+            fieldnames=['guardian_id FK(user_id)', 'assigned_client_id FK(client_id)']
+        )
 
-        # Also handle the corresponding user in `users.csv`
-        updated_users = [u for u in users if u['user_id'] != guardian_id]
-        write_csv('data/users.csv', updated_users, fieldnames=['user_id', 'name', 'phone', 'email', 'user_type'])
+        # Also remove the corresponding user in `users.csv`
+        updated_users = [u for u in users if u['user_id'] != str(guardian_id)]
+        write_csv(
+            'data/users.csv',
+            updated_users,
+            fieldnames=['user_id', 'name', 'phone', 'email', 'user_type']
+        )
 
         print(f"Guardian with ID {guardian_id} removed successfully.")
 

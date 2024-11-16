@@ -127,4 +127,31 @@ class Client:
                 print(f"{offering['offering_id']:<15}{offering['lesson_type']:<20}{location_name:<25}{schedule_info:<25}")
         print("=" * 85)
 
-   
+    @staticmethod
+    def view_client_bookings(client_id):
+        """
+        View bookings associated with a specific client ID.
+        """
+        bookings = read_csv('data/bookings.csv')
+        offerings = read_csv('data/offerings.csv')
+        schedules = read_csv('data/schedules.csv')
+
+        # Filter bookings for the given client ID
+        client_bookings = [b for b in bookings if b['client_id'] == str(client_id)]
+
+        if not client_bookings:
+            print(f"No bookings found for Client ID: {client_id}")
+            return
+
+        # Display the bookings
+        print(f"\nBookings for Client ID: {client_id}")
+        print(f"{'Booking ID':<15}{'Offering ID':<15}{'Schedule':<25}{'Available':<10}")
+        print("=" * 70)
+
+        for booking in client_bookings:
+            schedule = next((s for s in schedules if s['schedule_id'] == booking['schedule_id']), None)
+            schedule_info = f"{schedule['start_date']} to {schedule['end_date']} ({schedule['day']})" if schedule else "Unknown Schedule"
+
+            print(
+                f"{booking['booking_id']:<15}{booking['offering_id']:<15}{schedule_info:<25}{booking['is_available']:<10}"
+            )

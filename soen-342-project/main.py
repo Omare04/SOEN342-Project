@@ -77,7 +77,8 @@ def client_menu(client_id):
         print("1. Create Booking")
         print("2. View All Offerings")
         print("3. View My Details")
-        print("4. Logout")
+        print("4. View My Bookings")  # New menu option
+        print("5. Logout")
 
         choice = input("Enter choice: ")
 
@@ -96,12 +97,16 @@ def client_menu(client_id):
         elif choice == "3":
             Client.view_client_details(client_id)  # View client's personal details
 
-        elif choice == "4":
+        elif choice == "4":  # View bookings for the client
+            Client.view_client_bookings(client_id)
+
+        elif choice == "5":
             print("Logging out.")
             break
 
         else:
             print("Invalid choice. Please try again.")
+
 
 
 def instructor_menu(instructor_id):
