@@ -1,5 +1,9 @@
 # SOEN342 Project - Lesson Booking System
 
+## Video Demo
+
+https://youtu.be/lJslLtULNuE?si=nZ7iNlx4DncTFqlh
+
 ## Authors
 
 - **Omar Elmasaoudi** - Student ID: 40255123
